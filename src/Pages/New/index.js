@@ -1,8 +1,10 @@
 import React, { useState, useMemo } from 'react';
+import api from '../../Services/api';
+
 import camera from '../../assets/camera.svg';
 import './styles.css';
 
-export default function New() {
+export default function New({ history }) {
 
     const [thumbnail, setThumbnail] = useState(null);
     const [company, setCompany] = useState('');
@@ -13,13 +15,31 @@ export default function New() {
         return thumbnail ? URL.createObjectURL(thumbnail) : null;
      }, [thumbnail])
 
-    function handleSubmit() {
+    async function handleSubmit(event) {
+        event.preventDefault();
+        //Buscar o usuário que foi logado no LocalStorage
+        const user_id = localStorage.getItem('user');
+        //Enviado a requisição no formato MULTIPART From data
+        const data = new FormData();
+            data.append('thumbnail', thumbnail);
+            data.append('company', company);
+            data.append('techs', techs);
+            data.append('price', price);
 
+        await api.post('/spots', data, { 
+            headers: { user_id }
+        })
+
+        history.push('/dashboard');
     }
 
     return (
         <form onSubmit={handleSubmit}>
-            <label id="thumbnail" style={{ backgroundImage: `url(${preview})` }}>
+            <label 
+                id="thumbnail" 
+                style={{ backgroundImage: `url(${preview})` }}
+                className={thumbnail ? 'has-thumbnail' : ''}
+            >
                 <input type="file" onChange={event => setThumbnail(event.target.files[0])} />
                 <img src={camera} alt="camera"/>
             </label>

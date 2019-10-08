@@ -1,6 +1,6 @@
 label#thumbnail {
     margin-bottom: 20px;
-    border: 1px solid #ddd;
+    border: 2px dashed #ddd;
     background-size: cover;
     cursor: pointer;
     height: 160px;
@@ -10,4 +10,11 @@ label#thumbnail {
 }
 label#thumbnail input {
     display: none;
+}
+label#thumbnail.has-thumbnail {
+    border: 0;
+    border-radius: 10px;
+}
+label#thumbnail.has-thumbnail img {
+    display: none;    
 }
